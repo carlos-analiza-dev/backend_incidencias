@@ -33,7 +33,7 @@ export class Incidencia {
   @Column({ type: 'varchar', default: 'Sin correo' })
   correo: string;
 
-  @ManyToOne(() => Sucursale)
+  @ManyToOne(() => Sucursale, { eager: true })
   @JoinColumn({ name: 'sucursalId' })
   sucursal: Sucursale;
 

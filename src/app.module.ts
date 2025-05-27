@@ -11,6 +11,8 @@ import { CommonModule } from './common/common.module';
 import { AreaModule } from './area/area.module';
 import { ImplementacionAccionesModule } from './implementacion_acciones/implementacion_acciones.module';
 import { VerificacionAccionesModule } from './verificacion_acciones/verificacion_acciones.module';
+import { ImplementacionAccionesAccidentesModule } from './implementacion_acciones_accidentes/implementacion_acciones_accidentes.module';
+import { VerificacionAccionesAccidentesModule } from './verificacion_acciones_accidentes/verificacion_acciones_accidentes.module';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { VerificacionAccionesModule } from './verificacion_acciones/verificacion
     AreaModule,
     ImplementacionAccionesModule,
     VerificacionAccionesModule,
+    ImplementacionAccionesAccidentesModule,
+    VerificacionAccionesAccidentesModule,
   ],
   controllers: [],
   providers: [],

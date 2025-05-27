@@ -51,9 +51,6 @@ export class AccidentesService {
         order: {
           fechaIncidente: 'DESC',
         },
-        where: {
-          categoria: Categorias.NO_DEFINIDA,
-        },
       });
       if (!accidentes || accidentes.length === 0) {
         throw new NotFoundException(

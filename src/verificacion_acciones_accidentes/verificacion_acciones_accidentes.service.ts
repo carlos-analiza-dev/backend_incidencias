@@ -3,35 +3,36 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateVerificacionAccioneDto } from './dto/create-verificacion_accione.dto';
-import { UpdateVerificacionAccioneDto } from './dto/update-verificacion_accione.dto';
+import { CreateVerificacionAccionesAccidenteDto } from './dto/create-verificacion_acciones_accidente.dto';
+import { UpdateVerificacionAccionesAccidenteDto } from './dto/update-verificacion_acciones_accidente.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VerificacionAccioneIncidencia } from './entities/verificacion_accione.entity';
+import { VerificacionAccionesAccidente } from './entities/verificacion_acciones_accidente.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/auth/entities/auth.entity';
-import { Incidencia } from 'src/incidencias/entities/incidencia.entity';
+import { Accidente } from 'src/accidentes/entities/accidente.entity';
 import { PaginationDto } from 'src/common/dto/pagination-dto';
 import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
-export class VerificacionAccionesService {
+export class VerificacionAccionesAccidentesService {
   constructor(
-    @InjectRepository(VerificacionAccioneIncidencia)
-    private readonly verificacione_acciones_repo: Repository<VerificacionAccioneIncidencia>,
+    @InjectRepository(VerificacionAccionesAccidente)
+    private readonly verificacione_acciones_repo: Repository<VerificacionAccionesAccidente>,
     @InjectRepository(User)
     private readonly user_repo: Repository<User>,
-    @InjectRepository(Incidencia)
-    private readonly incidencia_repo: Repository<Incidencia>,
+    @InjectRepository(Accidente)
+    private readonly accidente_repo: Repository<Accidente>,
   ) {}
-  async create(createVerificacionAccioneDto: CreateVerificacionAccioneDto) {
+  async create(
+    createVerificacionAccionesAccidenteDto: CreateVerificacionAccionesAccidenteDto,
+  ) {
     const {
+      accidente,
       fecha_verificacion,
-      incidente,
       responsable_aplicar_correcciones,
       usuario_reporta,
       resultado,
-    } = createVerificacionAccioneDto;
-
+    } = createVerificacionAccionesAccidenteDto;
     try {
       const responsable_exist = await this.user_repo.findOne({
         where: { id: responsable_aplicar_correcciones },
@@ -49,18 +50,18 @@ export class VerificacionAccionesService {
           'No se encontro el usuario que reporta la verificacion.',
         );
 
-      const incidencia_exist = await this.incidencia_repo.findOne({
-        where: { id: incidente },
+      const incidencia_exist = await this.accidente_repo.findOne({
+        where: { id: accidente },
       });
       if (!incidencia_exist)
         throw new BadRequestException(
-          'No se encontro la incidencia seleccionada.',
+          'No se encontro el accidente seleccionada.',
         );
 
       const verificacion_accion = this.verificacione_acciones_repo.create({
         fecha_verificacion,
         resultado,
-        incidente: incidencia_exist,
+        accidente: incidencia_exist,
         responsable_aplicar_correcciones: responsable_exist,
         usuario_reporta: user_resporta_exist,
       });
@@ -74,19 +75,19 @@ export class VerificacionAccionesService {
   }
 
   findAll() {
-    return `This action returns all verificacionAcciones`;
+    return `This action returns all verificacionAccionesAccidentes`;
   }
 
-  async ObtenerVerificacionByIncidencia(
+  async ObtenerVerificacionByAccidente(
     id: string,
     paginationDto: PaginationDto,
   ) {
     const { limit = 10, offset = 0 } = paginationDto;
     try {
-      const [verificaciones_incidecias, total] =
+      const [verificaciones_accidente, total] =
         await this.verificacione_acciones_repo.findAndCount({
           where: {
-            incidente: {
+            accidente: {
               id: id,
             },
           },
@@ -96,17 +97,14 @@ export class VerificacionAccionesService {
             fecha_creacion: 'DESC',
           },
         });
-      if (
-        !verificaciones_incidecias ||
-        verificaciones_incidecias.length === 0
-      ) {
+      if (!verificaciones_accidente || verificaciones_accidente.length === 0) {
         throw new NotFoundException(
-          'No se encontraron verificaciones para esta incidencia',
+          'No se encontraron verificaciones para este accidente',
         );
       }
 
       return {
-        data: instanceToPlain(verificaciones_incidecias),
+        data: instanceToPlain(verificaciones_accidente),
         total,
       };
     } catch (error) {
@@ -114,18 +112,14 @@ export class VerificacionAccionesService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} verificacionAccione`;
-  }
-
   update(
     id: number,
-    updateVerificacionAccioneDto: UpdateVerificacionAccioneDto,
+    updateVerificacionAccionesAccidenteDto: UpdateVerificacionAccionesAccidenteDto,
   ) {
-    return `This action updates a #${id} verificacionAccione`;
+    return `This action updates a #${id} verificacionAccionesAccidente`;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} verificacionAccione`;
+    return `This action removes a #${id} verificacionAccionesAccidente`;
   }
 }

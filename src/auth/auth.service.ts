@@ -79,7 +79,6 @@ export class AuthService {
 
       return user;
     } catch (error) {
-      console.log(error);
       this.captureError(error);
     }
   }
@@ -111,8 +110,6 @@ export class AuthService {
   }
 
   async actualizarContrasena(updatePassword: UpdatePasswordDto) {
-    console.log({ updatePassword });
-
     const { email, nuevaContrasena } = updatePassword;
     const usuario = await this.userRepository.findOne({ where: { email } });
 

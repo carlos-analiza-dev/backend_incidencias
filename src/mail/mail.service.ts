@@ -24,8 +24,6 @@ export class MailService {
 
       return { message: 'Correo de confirmación enviado' };
     } catch (error) {
-      console.log('ERROR', error);
-
       throw new Error('Failed to send email');
     }
   }

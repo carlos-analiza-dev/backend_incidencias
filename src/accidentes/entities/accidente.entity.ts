@@ -1,3 +1,4 @@
+import { ImplementacionAccionesAccidente } from 'src/implementacion_acciones_accidentes/entities/implementacion_acciones_accidente.entity';
 import { Sucursale } from 'src/sucursales/entities/sucursale.entity';
 import { Categorias } from 'src/types/categorias.ype';
 import {
@@ -7,6 +8,7 @@ import {
   ManyToOne,
   JoinColumn,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('accidente')
@@ -74,4 +76,10 @@ export class Accidente {
 
   @Column({ type: 'enum', enum: Categorias, default: Categorias.NO_DEFINIDA })
   categoria: Categorias;
+
+  @OneToMany(
+    () => ImplementacionAccionesAccidente,
+    (accion) => accion.accidente,
+  )
+  accionesPreventivas: ImplementacionAccionesAccidente[];
 }

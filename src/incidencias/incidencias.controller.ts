@@ -37,7 +37,7 @@ export class IncidenciasController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.incidenciasService.findOne(+id);
+    return this.incidenciasService.findOne(id);
   }
 
   @Patch(':id')

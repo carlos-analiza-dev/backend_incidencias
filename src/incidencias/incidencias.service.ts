@@ -95,8 +95,17 @@ export class IncidenciasService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} incidencia`;
+  async findOne(id: string) {
+    try {
+      const incidencia = await this.incidenciaRepo.findOne({ where: { id } });
+      if (!incidencia)
+        throw new NotFoundException(
+          'No se encontro la incidencia seleccionada.',
+        );
+      return incidencia;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async update(id: string, updateIncidenciaDto: UpdateIncidenciaDto) {
