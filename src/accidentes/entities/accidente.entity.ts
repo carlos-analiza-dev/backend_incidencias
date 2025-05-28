@@ -19,7 +19,7 @@ export class Accidente {
   @Column({ type: 'varchar', length: 255 })
   area: string;
 
-  @ManyToOne(() => Sucursale, { nullable: false })
+  @ManyToOne(() => Sucursale, { nullable: false, eager: true })
   @JoinColumn({ name: 'sucursalId' })
   sucursal: Sucursale;
 

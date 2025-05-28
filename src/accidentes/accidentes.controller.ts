@@ -41,7 +41,7 @@ export class AccidentesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.accidentesService.findOne(+id);
+    return this.accidentesService.findOne(id);
   }
 
   @Patch(':id')

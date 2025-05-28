@@ -5,4 +5,5 @@ export enum UserRole {
   GERENTE_OPERACIONES = 'Gerente_Operaciones',
   USER = 'User',
   REGENTE = 'Regente',
+  GERENTE_CENTRO_PROCESAMIENTO = 'Gerente_Centro_Procesamiento',
 }

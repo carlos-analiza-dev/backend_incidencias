@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateImplementacionAccionesAccidenteDto } from './dto/create-implementacion_acciones_accidente.dto';
 import { UpdateImplementacionAccionesAccidenteDto } from './dto/update-implementacion_acciones_accidente.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +10,8 @@ import { User } from 'src/auth/entities/auth.entity';
 import { ImplementacionAccionesAccidente } from './entities/implementacion_acciones_accidente.entity';
 import { Repository } from 'typeorm';
 import { Accidente } from 'src/accidentes/entities/accidente.entity';
+import { PaginationDto } from 'src/common/dto/pagination-dto';
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class ImplementacionAccionesAccidentesService {
@@ -72,6 +78,33 @@ export class ImplementacionAccionesAccidentesService {
 
   findOne(id: number) {
     return `This action returns a #${id} implementacionAccionesAccidente`;
+  }
+
+  async ObtenerAccionesByAccidente(id: string, paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+    try {
+      const [acciones_accidente, total] = await this.acciones_Repo.findAndCount(
+        {
+          where: { accidente: { id: id } },
+          skip: offset,
+          take: limit,
+          order: { fecha_creacion: 'DESC' },
+        },
+      );
+
+      if (!acciones_accidente || acciones_accidente.length === 0) {
+        throw new NotFoundException(
+          'No se encontraron acciones disponibles para este accidente',
+        );
+      }
+
+      return {
+        total,
+        data: instanceToPlain(acciones_accidente),
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 
   update(

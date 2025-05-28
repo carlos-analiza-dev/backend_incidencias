@@ -107,8 +107,17 @@ export class AccidentesService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} accidente`;
+  async findOne(id: string) {
+    try {
+      const accidente = this.accidenteRepository.findOne({ where: { id: id } });
+      if (!Accidente)
+        throw new NotFoundException(
+          'No se encontro el accidente seleccionado.',
+        );
+      return accidente;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async update(id: string, updateAccidenteDto: UpdateAccidenteDto) {
